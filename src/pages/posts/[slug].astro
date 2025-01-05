@@ -1,0 +1,12 @@
+---
+export function getStaticPaths() {
+  return [
+    {params: {slug: 'prrueba-1'}},
+    {params: {slug: 'prueba-2'}},
+   
+  ];
+}
+
+const { slug } = Astro.params;
+---
+<div>Good dog, {slug}!</div>
