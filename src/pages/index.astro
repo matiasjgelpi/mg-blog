@@ -1,18 +1,67 @@
 ---
-import { getCollection } from 'astro:content';
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import { Image } from "astro:assets";
+import portada from "../assets/portada.jpg";
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import { createReader } from "@keystatic/core/reader";
+import keystaticConfig from "../../keystatic.config";
 
-const posts = await getCollection('posts');
-console.log(posts);
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const posts: CollectionEntry<"posts">[] = await getCollection("posts");
+const reader = createReader(process.cwd(), keystaticConfig);
+const homepage = await reader.singletons.homepage.read();
 ---
 
 <Layout>
-	{posts.map(post => (
-		<li><a href={`/posts/${post.slug}`}>{post.data.title}</a></li>
-	  ))}
-	<Welcome />
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <!-- <section class="mb-12 text-center">
+      <h2 class="text-4xl font-bold text-gray-800 mb-2">
+        {homepage?.title}
+      </h2>
+      <p class="text-xl text-gray-600 font-robotoMono">
+        {homepage?.subtitle}
+      </p>
+    </section> -->
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <div class="space-y-4">
+        <h2 class="text-3xl font-semibold text-gray-800">
+          {homepage?.contentTitle}
+        </h2>
+        <p class="text-gray-700 font-robotoMono" >
+          {homepage?.content}
+        </p>
+      </div>
+      <div class="relative h-64 rounded-lg overflow-hidden shadow-lg">
+        <Image
+          src={portada}
+          alt="Cinematic scene"
+          class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+        />
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Últimas opiniones</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {
+          posts.map(({ data, id }) => (
+            <article class="bg-white rounded-lg shadow-md p-6 transition-shadow hover:shadow-lg border-l-4 border-blue-600">
+              <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                {data.title}
+              </h3>
+              <p class="text-gray-600 mb-4 font-robotoMono">
+               {data.excerpt}
+              </p>
+              <a
+                href={`/posts/${id}`}
+                class="text-blue-600 hover:text-blue-800 transition-colors "
+              >
+                Leer más →
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </main>
 </Layout>

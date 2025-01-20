@@ -1,12 +1,68 @@
 ---
-export function getStaticPaths() {
-  return [
-    {params: {slug: 'prrueba-1'}},
-    {params: {slug: 'prueba-2'}},
-   
-  ];
+import { getEntry, render, type CollectionEntry } from "astro:content";
+import { ArrowLeft, Calendar, Clock } from "lucide-astro";
+import { Image } from "astro:assets";
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+export const readTime = "10 min read";
+
+export async function getStaticPaths() {
+  const getSlugs = await getCollection("posts");
+  return getSlugs.map((post: CollectionEntry<"posts">) => ({
+    params: { slug: post.id },
+  }));
 }
 
 const { slug } = Astro.params;
+
+const post: CollectionEntry<"posts"> | undefined = await getEntry(
+  "posts",
+  slug
+);
+
+if (!post) {
+  return new Response("Not found", { status: 404 });
+}
+const { Content } = await render(post);
+
+const { date, title, image } = post.data;
 ---
-<div>Good dog, {slug}!</div>
+
+<Layout>
+  <main class="max-w-3xl mx-auto px-4 py-8">
+    <a
+      href="/"
+      class="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
+    >
+      <ArrowLeft class="mr-2 h-4 w-4" />
+      Volver
+    </a>
+
+    <article>
+      <header class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">
+          {title}
+        </h1>
+        <div class="flex items-center text-gray-600 mb-4">
+          <Calendar class="mr-2 h-4 w-4" />
+          <time datetime={new Date(date).toISOString()}
+            >{new Date(date).toLocaleDateString()}</time
+          >
+
+          <!-- * Puede usarste ene el futuro -->
+          <!-- <span class="mx-2">|</span>
+          <Clock class="mr-2 h-4 w-4" />
+          <span>{readTime}</span> -->
+        </div>
+        <div
+          class="relative h-64 md:h-96 rounded-lg overflow-hidden shadow-lg mb-6"
+        >
+          <Image src={image} alt={title} class="w-full h-full object-cover" />
+        </div>
+      </header>
+
+      <Content />
+    </article>
+  </main>
+</Layout>
