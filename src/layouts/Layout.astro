@@ -1,6 +1,7 @@
 ---
 import { createReader } from "@keystatic/core/reader";
 import keystaticConfig from "../../keystatic.config";
+import ThemeIcon from "../components/ThemeIcon.astro";
 const thisYear = new Date().getFullYear();
 
 const reader = createReader(process.cwd(), keystaticConfig);
@@ -17,19 +18,19 @@ const homepage = await reader.singletons.homepage.read();
     <title>MG:TO</title>
   </head>
   <body
-    class="min-h-screen bg-gray-100 flex flex-col justify-between font-monserrat"
+    class="min-h-screen dark:bg-slate-600 bg-gray-100 flex flex-col justify-between font-monserrat"
   >
     <header class="bg-blue-600 text-white py-4">
-      <div class="max-w-4xl mx-auto px-4 flex justify-center items-center">
-		<a href="/">
-        <p class="text-3xl font-semibold">
-          {homepage?.title}:
-		</p>
-	</a>
-        <!-- <p class="text-sm">
-          {homepage?.subtitle}
-        </p> -->
-     
+      <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+        <div></div>
+        <a href="/">
+          <p class="text-3xl font-semibold">
+            {homepage?.title}
+          </p>
+        
+        </a>
+        <ThemeIcon />
+
         <!--* dejar esto para el futuro -->
         <!-- <nav class="space-x-4">
 				<a href="/" class="hover:underline">Home</a>

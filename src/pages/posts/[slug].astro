@@ -35,13 +35,13 @@ const { date, title, image } = post.data;
       href="/"
       class="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
     >
-      <ArrowLeft class="mr-2 h-4 w-4" />
+      <ArrowLeft class="mr-2 h-4 w-4 font-robotoMono" />
       Volver
     </a>
 
     <article>
       <header class="mb-8">
-        <h1 class="text-4xl font-bold text-gray-800 mb-4">
+        <h1 class="text-4xl  text-gray-800 mb-4 font-playfair">
           {title}
         </h1>
         <div class="flex items-center text-gray-600 mb-4">
@@ -62,7 +62,11 @@ const { date, title, image } = post.data;
         </div>
       </header>
 
-      <Content />
+      <div class="font-robotoMono">
+        <Content  />
+      </div>
+
+    
     </article>
   </main>
 </Layout>

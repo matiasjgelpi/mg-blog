@@ -13,7 +13,6 @@ console.log(env.SKIP_KEYSTATIC);
 
 // https://astro.build/config
 export default defineConfig({
-  // integrations: [react(), markdoc(),  tailwind(), keystatic()],
   integrations: [
     react(),
     tailwind(),
